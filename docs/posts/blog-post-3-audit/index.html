@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.40">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Noah Price">
+<meta name="dcterms.date" content="2025-03-12">
+<meta name="description" content="Noah Price Blog Post 3 - CSCI0451">
+
+<title>Auditing Bias – My Awesome CSCI 0451 Blog</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-6de787833effe4777a6777a5e05fb578.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>
+
+      .quarto-title-block .quarto-title-banner h1,
+      .quarto-title-block .quarto-title-banner h2,
+      .quarto-title-block .quarto-title-banner h3,
+      .quarto-title-block .quarto-title-banner h4,
+      .quarto-title-block .quarto-title-banner h5,
+      .quarto-title-block .quarto-title-banner h6
+      {
+        color: white;
+      }
+
+      .quarto-title-block .quarto-title-banner {
+        color: white;
+background-image: url(../../img/landscape.png);
+background-size: cover;
+      }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">My Awesome CSCI 0451 Blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About Noah P</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com"> <i class="bi bi-twitter" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Auditing Bias</h1>
+                  <div>
+        <div class="description">
+          Noah Price Blog Post 3 - CSCI0451
+        </div>
+      </div>
+                </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Noah Price </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">March 12, 2025</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<section id="abstract" class="level1">
+<h1>Abstract</h1>
+<p>When implementing and applying machine learning models to problems, it is imperative that we understand the potential for disparate impacts on people. For example, if a machine learning model were used by a company in their hiring process, and that model demonstrated bias towards certain races over others, that would yield unfair outcomes. In this blog post, a model will be trained which predicts the employment status of individuals based on census data taken in Tennessee in 2018. The model will then be audited for racial bias, with examinations of the prediction rates across racial categories, and a statistical examination of whether the model is fair or not.</p>
+</section>
+<section id="data" class="level1">
+<h1>Data</h1>
+<p>For this audit, we will use data from the <code>folktables</code> library. The following code block imports census data from Tennessee in 2018. It then filters it down to the list of features we will use in our model. In this data, RAC1P is the racial group of the respondent, which we will not use in training the model, so that it will be theoretically blind to race (though it may still exhibit bias). ESR is the employment status of the respondent, which is the target variable. Other notable features include age, level of education, marital status, and indicators of any disabilities in sight, hearing, or cognitive ability.</p>
+<div id="cell-3" class="cell" data-execution_count="61">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> folktables <span class="im">import</span> ACSDataSource, BasicProblem</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>STATE <span class="op">=</span> <span class="st">"TN"</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>data_source <span class="op">=</span> ACSDataSource(survey_year<span class="op">=</span><span class="st">'2018'</span>, </span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>                            horizon<span class="op">=</span><span class="st">'1-Year'</span>, </span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>                            survey<span class="op">=</span><span class="st">'person'</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>acs_data <span class="op">=</span> data_source.get_data(states<span class="op">=</span>[STATE], download<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>possible_features<span class="op">=</span>[<span class="st">'AGEP'</span>, <span class="st">'SCHL'</span>, <span class="st">'MAR'</span>, <span class="st">'RELP'</span>, <span class="st">'DIS'</span>, <span class="st">'ESP'</span>, <span class="st">'CIT'</span>, <span class="st">'MIG'</span>, <span class="st">'MIL'</span>, <span class="st">'ANC'</span>, <span class="st">'NATIVITY'</span>, <span class="st">'DEAR'</span>, <span class="st">'DEYE'</span>, <span class="st">'DREM'</span>, <span class="st">'SEX'</span>, <span class="st">'RAC1P'</span>, <span class="st">'ESR'</span>]</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>acs_data[possible_features].head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="61">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">AGEP</th>
+<th data-quarto-table-cell-role="th">SCHL</th>
+<th data-quarto-table-cell-role="th">MAR</th>
+<th data-quarto-table-cell-role="th">RELP</th>
+<th data-quarto-table-cell-role="th">DIS</th>
+<th data-quarto-table-cell-role="th">ESP</th>
+<th data-quarto-table-cell-role="th">CIT</th>
+<th data-quarto-table-cell-role="th">MIG</th>
+<th data-quarto-table-cell-role="th">MIL</th>
+<th data-quarto-table-cell-role="th">ANC</th>
+<th data-quarto-table-cell-role="th">NATIVITY</th>
+<th data-quarto-table-cell-role="th">DEAR</th>
+<th data-quarto-table-cell-role="th">DEYE</th>
+<th data-quarto-table-cell-role="th">DREM</th>
+<th data-quarto-table-cell-role="th">SEX</th>
+<th data-quarto-table-cell-role="th">RAC1P</th>
+<th data-quarto-table-cell-role="th">ESR</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>72</td>
+<td>5.0</td>
+<td>5</td>
+<td>16</td>
+<td>1</td>
+<td>NaN</td>
+<td>1</td>
+<td>1.0</td>
+<td>4.0</td>
+<td>4</td>
+<td>1</td>
+<td>2</td>
+<td>2</td>
+<td>2.0</td>
+<td>1</td>
+<td>1</td>
+<td>6.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>41</td>
+<td>18.0</td>
+<td>5</td>
+<td>16</td>
+<td>1</td>
+<td>NaN</td>
+<td>1</td>
+<td>1.0</td>
+<td>4.0</td>
+<td>1</td>
+<td>1</td>
+<td>2</td>
+<td>1</td>
+<td>1.0</td>
+<td>1</td>
+<td>1</td>
+<td>6.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>18</td>
+<td>18.0</td>
+<td>5</td>
+<td>17</td>
+<td>2</td>
+<td>NaN</td>
+<td>1</td>
+<td>3.0</td>
+<td>4.0</td>
+<td>1</td>
+<td>1</td>
+<td>2</td>
+<td>2</td>
+<td>2.0</td>
+<td>2</td>
+<td>1</td>
+<td>6.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>26</td>
+<td>16.0</td>
+<td>5</td>
+<td>16</td>
+<td>2</td>
+<td>NaN</td>
+<td>1</td>
+<td>3.0</td>
+<td>4.0</td>
+<td>2</td>
+<td>1</td>
+<td>2</td>
+<td>2</td>
+<td>2.0</td>
+<td>1</td>
+<td>1</td>
+<td>6.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>78</td>
+<td>20.0</td>
+<td>3</td>
+<td>16</td>
+<td>1</td>
+<td>NaN</td>
+<td>1</td>
+<td>1.0</td>
+<td>4.0</td>
+<td>4</td>
+<td>1</td>
+<td>2</td>
+<td>2</td>
+<td>2.0</td>
+<td>2</td>
+<td>1</td>
+<td>6.0</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Now, we will establish a BasicProblem from the data, which will define the problem which we will solve with our eventual model. First, we will define a list of features which does not include race or employment, as we will not use those features in training the model. Then, we will create a BasicProblem which uses that set of features, has employment as the target, and race as the group variable.</p>
+<div id="cell-5" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>features_to_use <span class="op">=</span> [f <span class="cf">for</span> f <span class="kw">in</span> possible_features <span class="cf">if</span> f <span class="kw">not</span> <span class="kw">in</span> [<span class="st">"ESR"</span>, <span class="st">"RAC1P"</span>]]</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>EmploymentProblem <span class="op">=</span> BasicProblem(</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    features<span class="op">=</span>features_to_use,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    target<span class="op">=</span><span class="st">'ESR'</span>,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    target_transform<span class="op">=</span><span class="kw">lambda</span> x: x <span class="op">==</span> <span class="dv">1</span>,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    group<span class="op">=</span><span class="st">'RAC1P'</span>,</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    preprocess<span class="op">=</span><span class="kw">lambda</span> x: x,</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    postprocess<span class="op">=</span><span class="kw">lambda</span> x: np.nan_to_num(x, <span class="op">-</span><span class="dv">1</span>),</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>features, label, group <span class="op">=</span> EmploymentProblem.df_to_numpy(acs_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>As a final preprocessing step, we will perform a train test split, so that we don’t train on all of the data, and can ensure that the model generalizes effectively to new data. The following code block performs this split; the subsequent code block converts the data into a pandas dataframe, which will be convenient for taking a look at the data before training the model.</p>
+<div id="cell-7" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test, group_train, group_test <span class="op">=</span> train_test_split(</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    features, label, group, test_size<span class="op">=</span><span class="fl">0.2</span>, random_state<span class="op">=</span><span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-8" class="cell" data-execution_count="62">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(X_train, columns <span class="op">=</span> features_to_use)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"group"</span>] <span class="op">=</span> group_train</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"label"</span>] <span class="op">=</span> y_train</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="62">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">AGEP</th>
+<th data-quarto-table-cell-role="th">SCHL</th>
+<th data-quarto-table-cell-role="th">MAR</th>
+<th data-quarto-table-cell-role="th">RELP</th>
+<th data-quarto-table-cell-role="th">DIS</th>
+<th data-quarto-table-cell-role="th">ESP</th>
+<th data-quarto-table-cell-role="th">CIT</th>
+<th data-quarto-table-cell-role="th">MIG</th>
+<th data-quarto-table-cell-role="th">MIL</th>
+<th data-quarto-table-cell-role="th">ANC</th>
+<th data-quarto-table-cell-role="th">NATIVITY</th>
+<th data-quarto-table-cell-role="th">DEAR</th>
+<th data-quarto-table-cell-role="th">DEYE</th>
+<th data-quarto-table-cell-role="th">DREM</th>
+<th data-quarto-table-cell-role="th">SEX</th>
+<th data-quarto-table-cell-role="th">group</th>
+<th data-quarto-table-cell-role="th">label</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>4.0</td>
+<td>1.0</td>
+<td>5.0</td>
+<td>2.0</td>
+<td>2.0</td>
+<td>2.0</td>
+<td>5.0</td>
+<td>1.0</td>
+<td>0.0</td>
+<td>1.0</td>
+<td>2.0</td>
+<td>2.0</td>
+<td>2.0</td>
+<td>0.0</td>
+<td>1.0</td>
+<td>1</td>
+<td>False</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>47.0</td>
+<td>19.0</td>
+<td>1.0</td>
+<td>0.0</td>
+<td>1.0</td>
+<td>0.0</td>
+<td>1.0</td>
+<td>1.0</td>
+<td>4.0</td>
+<td>3.0</td>
+<td>1.0</td>
+<td>2.0</td>
+<td>2.0</td>
+<td>2.0</td>
+<td>1.0</td>
+<td>1</td>
+<td>False</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>35.0</td>
+<td>20.0</td>
+<td>1.0</td>
+<td>0.0</td>
+<td>2.0</td>
+<td>0.0</td>
+<td>1.0</td>
+<td>3.0</td>
+<td>4.0</td>
+<td>2.0</td>
+<td>1.0</td>
+<td>2.0</td>
+<td>2.0</td>
+<td>2.0</td>
+<td>1.0</td>
+<td>1</td>
+<td>True</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>42.0</td>
+<td>16.0</td>
+<td>3.0</td>
+<td>0.0</td>
+<td>2.0</td>
+<td>0.0</td>
+<td>1.0</td>
+<td>1.0</td>
+<td>2.0</td>
+<td>1.0</td>
+<td>1.0</td>
+<td>2.0</td>
+<td>2.0</td>
+<td>2.0</td>
+<td>1.0</td>
+<td>1</td>
+<td>True</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>73.0</td>
+<td>19.0</td>
+<td>1.0</td>
+<td>1.0</td>
+<td>2.0</td>
+<td>0.0</td>
+<td>1.0</td>
+<td>1.0</td>
+<td>4.0</td>
+<td>4.0</td>
+<td>1.0</td>
+<td>2.0</td>
+<td>2.0</td>
+<td>2.0</td>
+<td>1.0</td>
+<td>2</td>
+<td>False</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Now let’s get an idea of the scale of our data, and some of the trends we may observe regarding employment status. The following code block prints the total number of respondents, the total number of employed respondents, and then a breakdown of those metrics by race group.</p>
+<div id="cell-10" class="cell" data-execution_count="64">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Number of individuals in dataframe:"</span>, df.shape[<span class="dv">0</span>]) </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Number of employed individuals:"</span>, df[<span class="st">"label"</span>].<span class="bu">sum</span>())</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Number of individuals by race"</span>, df.groupby(<span class="st">"group"</span>).size()) <span class="co"># 1 = white, 2 = black, 3 = other self identified race</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Employment rate by race"</span>, df[df[<span class="st">'label'</span>]].groupby(<span class="st">'group'</span>).size() <span class="op">/</span> df.groupby(<span class="st">'group'</span>).size())</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Employment rate for all self-identified categories:"</span>, df[df[<span class="st">'group'</span>] <span class="op">&gt;=</span> <span class="dv">3</span>][<span class="st">'label'</span>].mean())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Number of individuals in dataframe: 54360
+Number of employed individuals: 24060
+Number of individuals by race group
+1    44911
+2     6717
+3       80
+4        2
+5       30
+6      880
+7       31
+8      630
+9     1079
+dtype: int64
+Employment rate by race group
+1    0.449244
+2    0.416853
+3    0.437500
+4    1.000000
+5    0.366667
+6    0.464773
+7    0.354839
+8    0.465079
+9    0.299351
+dtype: float64
+Employment rate for all self-identified categories: 0.3967789165446559</code></pre>
+</div>
+</div>
+<p>As we can see, there is data for 54,360 respondents, 24,060 of which are employed, yielding an overall employment rate of <strong>44.26%</strong>. Of those 54,360 individuals, 44,911 are white (group 1), 6,717 are black (group 2), and 2,732 are of other self-identified racial categories (groups 3-9). The employment rate averages out to 44.9244% for white respondents, 41.6853% for black respondents, and 39.6779% across all other categories. To get a more indepth understanding of these categories, let’s take a look at employment rate not only by race, but also sex. The following code block generates a bar chart showing the employment rate within each racial group, also filtered by sex.</p>
+<div id="cell-12" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>rate_df <span class="op">=</span> (</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    df.groupby([<span class="st">'group'</span>, <span class="st">'SEX'</span>])[<span class="st">'label'</span>]</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    .mean()</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    .reset_index()</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>rate_df[<span class="st">'SEX'</span>] <span class="op">=</span> rate_df[<span class="st">'SEX'</span>].<span class="bu">map</span>({<span class="dv">1</span>: <span class="st">'Men'</span>, <span class="dv">2</span>: <span class="st">'Women'</span>}) <span class="co"># For readability</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>sns.barplot(data<span class="op">=</span>rate_df, x<span class="op">=</span><span class="st">'group'</span>, y<span class="op">=</span><span class="st">'label'</span>, hue<span class="op">=</span><span class="st">'SEX'</span>)</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Employment Rate'</span>)</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Race Group'</span>)</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Employment Rate by Group and Sex'</span>)</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>plt.ylim(<span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>plt.legend(title<span class="op">=</span><span class="st">'Sex'</span>)</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-7-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Employment rate is higher for white men than women, but higher for black women than black men. Across other racial groups, the general trend is that males have a higher employment rate, with the exception being people with two or more races, where females have higher rates. Overall, though, there are scarcely differences of more than 8% in categories with sufficient sample sizes (category 4, alaskan natives, shows a large disparity since there were only 2 respondents).</p>
+</section>
+<section id="modeling" class="level1">
+<h1>Modeling</h1>
+<p>Now it is time to train a model. I chose to go with the Support Vector Classifier, which aims to make classifications by finding a hyperplane which maximizes the distance between groups. The regularization parameter C is of key interest, as it specifies the model’s tolerance for misclassification. With a lower value of C, the model will be more willing to misclassify outliers if the hyperplane can be more distant between groups; with a larger value of C, misclassifications are punished more harshly. To tune this parameter, I will use a grid search in combination with cross validation. The grid search computes scores for X_train on a range of potential C values, performing 5-fold cross validation each time. The <code>n_jobs</code> parameter allows the grid search to take advantage of parallel computing– by setting it to -1, it will use all available cores for computation, minimizing the running time. At the end, the grid search will have the best C value and best accuracy stored in the <code>best_params_</code> array and the <code>best_score_</code> variable respectively. I initially performed a grid search on a wide range of potential C values, ranging from 0.01 to 100, to get a relative idea of where the parameter should be. This yielded the following results:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./SVC_wide.png" class="img-fluid figure-img"></p>
+<figcaption>Results of initial grid search (C = 10)</figcaption>
+</figure>
+</div>
+<p>In this range, the optimal value of C was 10. To get even better accuracy, I then adjusted the grid search parameters to a range from 5 - 40, which yields the following results.</p>
+<div id="cell-15" class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.svm <span class="im">import</span> SVC</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> make_pipeline</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> GridSearchCV, StratifiedKFold</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the pipeline</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> make_pipeline(StandardScaler(), SVC())</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Define parameter grid for 'C'</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>param_grid <span class="op">=</span> {<span class="st">'svc__C'</span>: [<span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">30</span>, <span class="dv">40</span>]}</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Set up stratified cross-validation</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>cv <span class="op">=</span> StratifiedKFold(n_splits<span class="op">=</span><span class="dv">5</span>, shuffle<span class="op">=</span><span class="va">True</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Setup GridSearchCV</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>grid_search <span class="op">=</span> GridSearchCV(</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>    model, </span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>    param_grid, </span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    cv<span class="op">=</span>cv, </span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>    scoring<span class="op">=</span><span class="st">'accuracy'</span>,</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>    n_jobs<span class="op">=-</span><span class="dv">1</span>,</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>    verbose<span class="op">=</span><span class="dv">2</span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>grid_search.fit(X_train, y_train)</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Best C value:"</span>, grid_search.best_params_[<span class="st">'svc__C'</span>])</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Best cross-validation accuracy:"</span>, grid_search.best_score_)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Fitting 5 folds for each of 5 candidates, totalling 25 fits
+[CV] END ...........................................svc__C=5; total time= 2.7min
+[CV] END ...........................................svc__C=5; total time= 2.7min
+[CV] END ...........................................svc__C=5; total time= 2.7min
+[CV] END ...........................................svc__C=5; total time= 2.7min
+[CV] END ...........................................svc__C=5; total time= 2.7min
+[CV] END ..........................................svc__C=10; total time= 2.9min
+[CV] END ..........................................svc__C=10; total time= 2.9min
+[CV] END ..........................................svc__C=10; total time= 3.0min
+[CV] END ..........................................svc__C=10; total time= 2.7min
+[CV] END ..........................................svc__C=10; total time= 2.8min
+[CV] END ..........................................svc__C=20; total time= 3.3min
+[CV] END ..........................................svc__C=20; total time= 3.3min
+[CV] END ..........................................svc__C=20; total time= 3.3min
+[CV] END ..........................................svc__C=20; total time= 3.3min
+[CV] END ..........................................svc__C=20; total time= 3.3min
+[CV] END ..........................................svc__C=30; total time= 3.6min
+[CV] END ..........................................svc__C=30; total time= 3.6min
+[CV] END ..........................................svc__C=30; total time= 3.5min
+[CV] END ..........................................svc__C=30; total time= 3.5min
+[CV] END ..........................................svc__C=30; total time= 3.6min
+[CV] END ..........................................svc__C=40; total time= 3.7min
+[CV] END ..........................................svc__C=40; total time= 3.7min
+[CV] END ..........................................svc__C=40; total time= 3.7min
+[CV] END ..........................................svc__C=40; total time= 3.5min
+[CV] END ..........................................svc__C=40; total time= 2.3min
+Best C value: 5
+Best cross-validation accuracy: 0.8216703458425313</code></pre>
+</div>
+</div>
+<p>The optimal C value was found to be 5, with an accuracy of 82.17%. To get a better idea of the model’s performance on unseen data, we will now evaluate it on the test data.</p>
+<div id="cell-17" class="cell" data-execution_count="65">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>y_hat <span class="op">=</span> grid_search.predict(X_test)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Testing accuracy:"</span>, (y_hat <span class="op">==</span> y_test).mean()<span class="op">*</span><span class="dv">100</span>, <span class="st">"%"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Testing accuracy: 82.89183222958057 %</code></pre>
+</div>
+</div>
+<p>The testing accuracy is 82.89%, which is even higher than the training accuracy. For another metric of the model’s success, we can look at the positive predictive value (ppv), which is the likelihood that a positive prediction from the model correlates with a positive outcome (in this case, it’s the rate at which the model correctly classified employed respondents as employed). The <code>precision_score</code> function from <code>sklearn</code> can calculate the overall ppv of the model on the test data.</p>
+<div id="cell-19" class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> precision_score</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>ppv <span class="op">=</span> precision_score(y_test, y_hat)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"The PPV of the model is"</span>, ppv<span class="op">*</span><span class="dv">100</span>, <span class="st">"%"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The PPV of the model is 78.03052978150255 %</code></pre>
+</div>
+</div>
+<p>With a ppv of 78.03%, the model’s positive predictions are trustworthy just over three quarters of the time overall. To more clearly understand the ppv score, we can use <code>sklearn</code>’s <code>confusion_matrix</code> function to determine the true negative, false positive, false negative, and true positive rates of prediction. The <code>ravel()</code> method simply stores each of these values in a separate variable, as opposed to generating the matrix.</p>
+<div id="cell-21" class="cell" data-execution_count="68">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> confusion_matrix</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>tn, fp, fn, tp <span class="op">=</span> confusion_matrix(y_test, y_hat).ravel()</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>fpr <span class="op">=</span> fp <span class="op">/</span> (fp<span class="op">+</span>tn)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>fnr <span class="op">=</span> fn <span class="op">/</span> (fn<span class="op">+</span>tp)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"The overall False Positive Rate is"</span>, fpr<span class="op">*</span><span class="dv">100</span>, <span class="st">"%"</span>)</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"The overall False Negative Rate is"</span>, fnr<span class="op">*</span><span class="dv">100</span>, <span class="st">"%"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The overall False Positive Rate is 19.523872855432902 %
+The overall False Negative Rate is 14.116290561686707 %</code></pre>
+</div>
+</div>
+<p>The false positive rate is 19.52%, and the false negative rate is 14.17%. These imply that the true positive rate is 85.83%, and the true negative rate is 80.48%. Overall, the model does a better job with predictions on employed respondents than unemployed respondents, but is at least 80% accurate even in the worst case. To better understand how bias may have crept in the model, we will now examine the rates of prediction more closely across racial categories.</p>
+</section>
+<section id="auditing" class="level1">
+<h1>Auditing</h1>
+<section id="by-group-measures" class="level2">
+<h2 class="anchored" data-anchor-id="by-group-measures">By-group measures</h2>
+<p>To begin, we will re-calculate the accuracy, positive predictive value, and false positive/false negative rates of the model by each sub-group. Due to the sample size being relatively small across groups outside of black or white, we will group all other self-identified race categories into a single group.</p>
+<div id="cell-24" class="cell" data-execution_count="67">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Accuracy for white respondents:"</span>, (y_hat <span class="op">==</span> y_test)[group_test <span class="op">==</span> <span class="dv">1</span>].mean()<span class="op">*</span><span class="dv">100</span>, <span class="st">"%"</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Accuracy for black respondents:"</span>, (y_hat <span class="op">==</span> y_test)[group_test <span class="op">==</span> <span class="dv">2</span>].mean()<span class="op">*</span><span class="dv">100</span>, <span class="st">"%"</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Accuracy for self-identified race respondents:"</span>, (y_hat <span class="op">==</span> y_test)[group_test <span class="op">&gt;=</span> <span class="dv">3</span>].mean()<span class="op">*</span><span class="dv">100</span>, <span class="st">"%"</span>)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">"</span>)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"PPV for white respondents:"</span>, precision_score(y_test[group_test<span class="op">==</span><span class="dv">1</span>], y_hat[group_test<span class="op">==</span><span class="dv">1</span>])<span class="op">*</span><span class="dv">100</span>, <span class="st">"%"</span>)</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"PPV for black respondents:"</span>, precision_score(y_test[group_test<span class="op">==</span><span class="dv">2</span>], y_hat[group_test<span class="op">==</span><span class="dv">2</span>])<span class="op">*</span><span class="dv">100</span>, <span class="st">"%"</span>)</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"PPV for self-identified race respondents:"</span>, precision_score(y_test[group_test<span class="op">&gt;=</span><span class="dv">3</span>], y_hat[group_test<span class="op">&gt;=</span><span class="dv">3</span>])<span class="op">*</span><span class="dv">100</span>, <span class="st">"%"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Accuracy for white respondents: 82.97379211980746 %
+Accuracy for black respondents: 82.17880402605093 %
+Accuracy for self-identified race respondents: 83.30893118594437 %
+
+
+PPV for white respondents: 78.5496866606983 %
+PPV for black respondents: 74.52471482889734 %
+PPV for self-identified race respondents: 77.59740259740259 %</code></pre>
+</div>
+</div>
+<p>As we can see, the accuracy is relatively similar across all categories, being within 1.2 percentage points of each other. Black respondents are subject to the least accurate predictions, while self-identified race respondents have the most accurate predictions. That said, when it comes to PPV, the numbers are a bit more spread, with a 4 percentage point difference from the most ppv (white respondents) to the least ppv (black respondents). This may suggest that the model over-predicts employment for black respondents, as the case of a positive prediction but a negative outcome is more common for that group based on the PPV. The following code blocks generate the false positive and false negative rates for each racial group.</p>
+<div id="cell-26" class="cell" data-execution_count="69">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>tn1, fp1, fn1, tp1 <span class="op">=</span> confusion_matrix(y_test[group_test<span class="op">==</span><span class="dv">1</span>], y_hat[group_test<span class="op">==</span><span class="dv">1</span>]).ravel()</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>fpr1 <span class="op">=</span> fp1 <span class="op">/</span> (fp1<span class="op">+</span>tn1)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>fnr1 <span class="op">=</span> fn1 <span class="op">/</span> (fn1<span class="op">+</span>tp1)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"The False Positive Rate for white respondents is"</span>, fpr1<span class="op">*</span><span class="dv">100</span>, <span class="st">"%"</span>)</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"The False Negative Rate for white respondents is"</span>, fnr1<span class="op">*</span><span class="dv">100</span>, <span class="st">"%"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The False Positive Rate for white respondents is 19.57836247752901 %
+The False Negative Rate for white respondents is 13.963522259266522 %</code></pre>
+</div>
+</div>
+<div id="cell-27" class="cell" data-execution_count="70">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>tn2, fp2, fn2, tp2 <span class="op">=</span> confusion_matrix(y_test[group_test<span class="op">==</span><span class="dv">2</span>], y_hat[group_test<span class="op">==</span><span class="dv">2</span>]).ravel()</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>fpr2 <span class="op">=</span> fp2 <span class="op">/</span> (fp2<span class="op">+</span>tn2)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>fnr2 <span class="op">=</span> fn2 <span class="op">/</span> (fn2<span class="op">+</span>tp2)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"The False Positive Rate for black respondents is"</span>, fpr2<span class="op">*</span><span class="dv">100</span>, <span class="st">"%"</span>)</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"The False Negative Rate for black respondents is"</span>, fnr2<span class="op">*</span><span class="dv">100</span>, <span class="st">"%"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The False Positive Rate for black respondents is 20.07992007992008 %
+The False Negative Rate for black respondents is 14.534883720930234 %</code></pre>
+</div>
+</div>
+<div id="cell-28" class="cell" data-execution_count="71">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>tn3, fp3, fn3, tp3 <span class="op">=</span> confusion_matrix(y_test[group_test<span class="op">&gt;=</span><span class="dv">3</span>], y_hat[group_test<span class="op">&gt;=</span><span class="dv">3</span>]).ravel()</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>fpr3 <span class="op">=</span> fp3 <span class="op">/</span> (fp3<span class="op">+</span>tn3)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>fnr3 <span class="op">=</span> fn3 <span class="op">/</span> (fn3<span class="op">+</span>tp3)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"The False Positive Rate for self-identified race category respondents is"</span>, fpr3<span class="op">*</span><span class="dv">100</span>, <span class="st">"%"</span>)</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"The False Negative Rate for self-identified race category respondents is"</span>, fnr3<span class="op">*</span><span class="dv">100</span>, <span class="st">"%"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The False Positive Rate for self-identified race category respondents is 17.293233082706767 %
+The False Negative Rate for self-identified race category respondents is 15.845070422535212 %</code></pre>
+</div>
+</div>
+<p>As implied earlier by the ppv results, black respondents were subject to the highest false positive rate, at over 20%. Self-identified race respondents were subject to the highest false negative rate, at almost 16%. White respondents are subject to the lowest false negative rate, at almost 14%, and self-identified race respondents were subject to the lowest false positive rate, at just over 17%. Overall, the error rates are relatively close, within 3 percentage points of one another, but are disparate across the different groups, which may be unfair at a wide enough scale. The model does satisfy approximate error rate balance, though further calculation would be needed to determine whether the percentage point disparities are significant or not.</p>
+</section>
+<section id="bias-measures" class="level2">
+<h2 class="anchored" data-anchor-id="bias-measures">Bias Measures</h2>
+<p>To formally understand potential bias, we will evaluate the model in terms of two more statistical definitions of fairness. The first is calibration. A scoring system is said to be calibrated if, across all different scores and all different groups, the rates of actual outcomes are the same. In our case, the scoring system is simply a positive or negative prediction. Notably, this means that calibration is effectively equivalent to the second definition of fairness: statistical parity, which asks whether the rate of outcomes is equal across different predictive groups. Because our score is a 0 or 1 prediction, satisfying calibration implies satisfying statistical parity, and vice versa. The following code block generates the employment rate by race, and prediction of the model on the test set. To make this calculation easier, we will create a small dataframe with the three relevant criteria.</p>
+<div id="cell-31" class="cell" data-execution_count="45">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calibration evaluation</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>calib_df <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'group'</span>: group_test,    </span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">'y_true'</span>: y_test,</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">'prediction'</span>: y_hat</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>mean1 <span class="op">=</span> calib_df[(calib_df[<span class="st">'group'</span>] <span class="op">==</span> <span class="dv">1</span>) <span class="op">&amp;</span> (calib_df[<span class="st">'prediction'</span>] <span class="op">==</span> <span class="dv">0</span>)][<span class="st">'y_true'</span>].mean()</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"White respondents, negative prediction: "</span>, mean1<span class="op">*</span><span class="dv">100</span>, <span class="st">"%"</span>)</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>mean2 <span class="op">=</span> calib_df[(calib_df[<span class="st">'group'</span>] <span class="op">==</span> <span class="dv">2</span>) <span class="op">&amp;</span> (calib_df[<span class="st">'prediction'</span>] <span class="op">==</span> <span class="dv">0</span>)][<span class="st">'y_true'</span>].mean()</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Black respondents, negative predictions: "</span>, mean2<span class="op">*</span><span class="dv">100</span>, <span class="st">"%"</span>)</span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>mean3 <span class="op">=</span> calib_df[(calib_df[<span class="st">'group'</span>] <span class="op">&gt;=</span> <span class="dv">3</span>) <span class="op">&amp;</span> (calib_df[<span class="st">'prediction'</span>] <span class="op">==</span> <span class="dv">0</span>)][<span class="st">'y_true'</span>].mean()</span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Self-identified race respondents, negative predictions: "</span>, mean3<span class="op">*</span><span class="dv">100</span>, <span class="st">"%"</span>)</span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">"</span>)</span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>mean4 <span class="op">=</span> calib_df[(calib_df[<span class="st">'group'</span>] <span class="op">==</span> <span class="dv">1</span>) <span class="op">&amp;</span> (calib_df[<span class="st">'prediction'</span>] <span class="op">==</span> <span class="dv">1</span>)][<span class="st">'y_true'</span>].mean()</span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"White respondents, positive predictions: "</span>, mean4<span class="op">*</span><span class="dv">100</span>, <span class="st">"%"</span>)</span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>mean5 <span class="op">=</span> calib_df[(calib_df[<span class="st">'group'</span>] <span class="op">==</span> <span class="dv">2</span>) <span class="op">&amp;</span> (calib_df[<span class="st">'prediction'</span>] <span class="op">==</span> <span class="dv">1</span>)][<span class="st">'y_true'</span>].mean()</span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Black respondents, positive predictions: "</span>, mean5<span class="op">*</span><span class="dv">100</span>, <span class="st">"%"</span>)</span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a>mean6 <span class="op">=</span> calib_df[(calib_df[<span class="st">'group'</span>] <span class="op">&gt;=</span> <span class="dv">3</span>) <span class="op">&amp;</span> (calib_df[<span class="st">'prediction'</span>] <span class="op">==</span> <span class="dv">1</span>)][<span class="st">'y_true'</span>].mean()</span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Self-identified race respondents, positive predictions: "</span>, mean6<span class="op">*</span><span class="dv">100</span>, <span class="st">"%"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>White respondents, negative prediction:  12.639801171666962 %
+Black respondents, negative predictions:  11.11111111111111 %
+Self-identified race respondents, negative predictions:  12.0 %
+
+
+White respondents, positive predictions:  78.5496866606983 %
+Black respondents, positive predictions:  74.52471482889734 %
+Self-identified race respondents, positive predictions:  77.59740259740259 %</code></pre>
+</div>
+</div>
+<p>Across race and predictive categories, rates of outcome are relatively similar, with a 1.5% distribution in the case of negative predictions, and a 4% distribution in the case of positive predictions (the positive category is equivalent to ppv). Overall, the model seems decently calibrated, especially in the negative case, though further statistical analysis would be necessary to determine if the 4% gap in the positive case is significant. This implies that the model also reasonably satisfies statistical parity, since, as discussed before, the two are effectively identical in the case of prediction.</p>
+</section>
+<section id="fairness" class="level2">
+<h2 class="anchored" data-anchor-id="fairness">Fairness</h2>
+<p>To determine how fair the model <em>could</em> be given some adjustments, we will now reproduce Fig. 7 from Chouldecova, which plots false positive rate as a function of false negative rate. The equation for false positive rate as a function of false negative rate also uses the prevalence of employment in each category, as well as the positive predictive value of the model. Here is the equation:</p>
+<p><span class="math display">\[
+FPR = \frac{p}{1 - p} \times \frac{1 - PPV}{PPV} \times (1 - FNR)
+\]</span></p>
+<p>Specifically, we will use the prevalence from each category, but we will assume a constant ppv, as we are interested in changing the false negative rate, not the ppv. We will use the lowest ppv across all three groups in each calculation, meaning we will take the ppv for black respondents, as that was found to be the weakest ppv earlier. The following code performs all of these calculations, then plots the relations between potential false positive rate and false negative rate, as well as the true values of false positive rate and false negative rate for each group. You will notice that the only point which falls on its corresponding line is the point for black respondents; this is because we used the ppv which correlates with black respondents.</p>
+<div id="cell-34" class="cell" data-execution_count="57">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>p1 <span class="op">=</span> y_test[group_test<span class="op">==</span><span class="dv">1</span>].mean()    <span class="co"># Prevalence</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>p2 <span class="op">=</span> y_test[group_test<span class="op">==</span><span class="dv">2</span>].mean()</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>p3 <span class="op">=</span> y_test[group_test<span class="op">&gt;=</span><span class="dv">3</span>].mean()</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>min_ppv <span class="op">=</span> precision_score(y_test[group_test<span class="op">==</span><span class="dv">2</span>], y_hat[group_test<span class="op">==</span><span class="dv">2</span>]) <span class="co"># Lowest observed PPV was for black respondents</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> compute_fpr(fnr, p, ppv):</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (p <span class="op">/</span> (<span class="dv">1</span> <span class="op">-</span> p)) <span class="op">*</span> ((<span class="dv">1</span> <span class="op">-</span> ppv) <span class="op">/</span> ppv) <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> fnr) <span class="co"># Equation 2.6</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>fnr_values <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">100</span>)</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>fpr_values_1 <span class="op">=</span> compute_fpr(fnr_values, p1, min_ppv)</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>fpr_values_2 <span class="op">=</span> compute_fpr(fnr_values, p2, min_ppv)</span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>fpr_values_3 <span class="op">=</span> compute_fpr(fnr_values, p3, min_ppv)</span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>plt.plot(fnr_values, fpr_values_1, label<span class="op">=</span><span class="st">'FPR vs FNR (1)'</span>, color<span class="op">=</span><span class="st">'blue'</span>)</span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>plt.plot(fnr_values, fpr_values_2, label<span class="op">=</span><span class="st">'FPR vs FNR (2)'</span>, color<span class="op">=</span><span class="st">'red'</span>)</span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>plt.plot(fnr_values, fpr_values_3, label<span class="op">=</span><span class="st">'FPR vs FNR (3)'</span>, color<span class="op">=</span><span class="st">'green'</span>)</span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a>plt.scatter(fnr1, fpr1, color<span class="op">=</span><span class="st">'blue'</span>, zorder<span class="op">=</span><span class="dv">3</span>, s<span class="op">=</span><span class="dv">17</span>, label<span class="op">=</span><span class="st">"Actual Rates (group 1)"</span>)</span>
+<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a>plt.scatter(fnr2, fpr2, color<span class="op">=</span><span class="st">'red'</span>, zorder<span class="op">=</span><span class="dv">3</span>, s<span class="op">=</span><span class="dv">17</span>, label<span class="op">=</span><span class="st">"Actual Rates (group 2)"</span>)</span>
+<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a>plt.scatter(fnr3, fpr3, color<span class="op">=</span><span class="st">'green'</span>, zorder<span class="op">=</span><span class="dv">3</span>, s<span class="op">=</span><span class="dv">17</span>, label<span class="op">=</span><span class="st">"Actual Rates (group 3)"</span>)</span>
+<span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-25"><a href="#cb26-25" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'False Negative Rate (FNR)'</span>)</span>
+<span id="cb26-26"><a href="#cb26-26" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'False Positive Rate (FPR)'</span>)</span>
+<span id="cb26-27"><a href="#cb26-27" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'FPR as a Function of FNR'</span>)</span>
+<span id="cb26-28"><a href="#cb26-28" aria-hidden="true" tabindex="-1"></a>plt.grid(<span class="va">True</span>)</span>
+<span id="cb26-29"><a href="#cb26-29" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb26-30"><a href="#cb26-30" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-17-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Based on this chart, if we want the false positive rate to be equal among all groups, we would have to increase the false negative rate of group 2 to around 27-28%, at which point the actual rate for group 2 would have a matching false positive rate with group 3. Seeing as it currently sits at around 14%, this is a substantial increase, almost doubling the false negative rate. For group 1, the increase would be slightly less significant, as it sits at a lower initial false positive rate, though it would still nearly double. While this solution may decrease the disparate outcomes generated by the model, it would come at a substantial cost in accuracy. There may not be an effective means of correcting this bias without introducing substantial error rates for the model.</p>
+</section>
+</section>
+<section id="discussion" class="level1">
+<h1>Discussion</h1>
+<ol type="1">
+<li>What groups of people could stand to benefit from a system that is able to predict the label you predicted? For example, what kinds of companies might want to buy your model for commercial use?</li>
+</ol>
+<p>This model, which predicts the employment status of an individual based on metrics of their life, could be used by a broad range of companies– essentially any company which is looking to hire people from the general public. When screening applicants, they could feed a given applicant’s information to the model, and take a look at its prediction. Obviously, the companty is not necessarily interested in learning the current employment status of the candidate, but if the model predicted that the candidate is currently employed, that may suggest that they are a good choice for the company to hire. This is dangerous, as the company may not understand the model’s reasoning for its predictions, and the model may exhibit bias towards certain groups rather than others, which creates an unfair scenario for job seekers.</p>
+<ol start="2" type="1">
+<li>Based on your bias audit, what could be the <em>impact</em> of deploying your model for large-scale prediction in commercial or governmental settings?</li>
+</ol>
+<p>Given my bias audit, there are potential disparate impacts for certain groups if this model were to be used in a scenario like the one described above. While error rates between groups were relatively close, and the model was approximately calibrated, the positive predictive value was lower for black respondents than respondents of other racial groups. This suggests that black respondents are over-predicted to be employed when compared with white respondents. Depending on how that result was used, this could lead to inaccurate hiring procedures at a company, or, if used in a governmental setting, could lead to inaccurate predictions regarding employment rates. If employment rates for black people were systematically overpredicted by the government, for example, they may be granted less access to unemployment programs or benefits.</p>
+<ol start="3" type="1">
+<li>Based on your bias audit, do you feel that your model displays problematic bias? What kind (calibration, error rate, etc)?</li>
+</ol>
+<p>While the bias audit did reveal small discrepancies between categories, it is unclear whether this bias is problematic. Without a clear understanding of how the model would be used, as well as whether or not the differences between categories are statistically significant, it is difficult to evaluate whether the bias displayed is problematic or not. The category with the most potential to be problematic was positive predictive value, as the scenario above shows how the 4% discrepancy between white respondents and black respondents could cause harm. However, given the model’s relatively even accuracy, and limited displays of bias, I find it unlikely that the model is inherently problematic– though it could be used in problematic ways.</p>
+<ol start="4" type="1">
+<li>Beyond bias, are there other potential problems associated with deploying your model that make you uncomfortable? How would you propose addressing some of these problems?</li>
+</ol>
+<p>The main issue I see with deploying a model like this is that the prediction it makes is not useful in and of itself, and the sorts of things for which it could be useful are things which I believe automated decision systems should not be handling. In the employment case, hiring processes should be carried out by humans, as reducing a human to a set of features does not give a fair and accurate picture of how that person would be in the workplace. In the governmental setting, predictions should not be used as any form of justification for legislation– hard data should be used. I believe the most accurate way to address this concern is that machine learning models should only be used in cases where the computational problem at hand is clear, and has relatively low stakes. For example, blog post one on classifying penguins presents an example where the algorithm has relatively low potential to cause societal harm, and has innate utility in allowing someone to predict a species without actually having taken a look at the animal in question. These applications are where machine learning is strong, as the data on which the model is trained, as well as the predictions it makes, have little potential to introduce bias.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

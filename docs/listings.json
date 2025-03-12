@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/blog-post-3-audit/index.html",
       "/posts/blog-post-2-design/index.html",
       "/posts/blog-post-1-penguins/index.html",
       "/posts/new-test-post/index.html",
