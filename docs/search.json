@@ -53,7 +53,7 @@
     "href": "index.html",
     "title": "My Awesome CSCI 0451 Blog",
     "section": "",
-    "text": "Overfitting, Overparameterization, and Double Descent\n\n\n\n\n\nNoah Price Blog Post 6 - CSCI0451\n\n\n\n\n\nApr 28, 2025\n\n\nNoah Price\n\n\n\n\n\n\n\n\n\n\n\n\nOverfitting, Overparameterization, and Double Descent\n\n\n\n\n\nNoah Price Blog Post 6 - CSCI0451\n\n\n\n\n\nApr 21, 2025\n\n\nNoah Price\n\n\n\n\n\n\n\n\n\n\n\n\nImplementing the Perceptron Algorithm\n\n\n\n\n\nNoah Price Blog Post 5 - CSCI0451\n\n\n\n\n\nMar 31, 2025\n\n\nNoah Price\n\n\n\n\n\n\n\n\n\n\n\n\nLimits of the Quantitative Approach to Fairness\n\n\n\n\n\nNoah Price Blog Post 4 - CSCI0451\n\n\n\n\n\nMar 26, 2025\n\n\nNoah Price\n\n\n\n\n\n\n\n\n\n\n\n\nAuditing Bias\n\n\n\n\n\nNoah Price Blog Post 3 - CSCI0451\n\n\n\n\n\nMar 12, 2025\n\n\nNoah Price\n\n\n\n\n\n\n\n\n\n\n\n\nDesign and Impact of Automated Decision Systems\n\n\n\n\n\nNoah Price Blog Post 2 - CSCI0451\n\n\n\n\n\nMar 5, 2025\n\n\nNoah Price\n\n\n\n\n\n\n\n\n\n\n\n\nClassifying Palmer Penguins\n\n\n\n\n\nNoah Price Blog Post 1 - CSCI0451\n\n\n\n\n\nFeb 21, 2025\n\n\nNoah Price\n\n\n\n\n\n\nNo matching items"
+    "text": "Implementing Logistic Regression\n\n\n\n\n\nNoah Price Blog Post 7 - CSCI0451\n\n\n\n\n\nApr 28, 2025\n\n\nNoah Price\n\n\n\n\n\n\n\n\n\n\n\n\nOverfitting, Overparameterization, and Double Descent\n\n\n\n\n\nNoah Price Blog Post 6 - CSCI0451\n\n\n\n\n\nApr 21, 2025\n\n\nNoah Price\n\n\n\n\n\n\n\n\n\n\n\n\nImplementing the Perceptron Algorithm\n\n\n\n\n\nNoah Price Blog Post 5 - CSCI0451\n\n\n\n\n\nMar 31, 2025\n\n\nNoah Price\n\n\n\n\n\n\n\n\n\n\n\n\nLimits of the Quantitative Approach to Fairness\n\n\n\n\n\nNoah Price Blog Post 4 - CSCI0451\n\n\n\n\n\nMar 26, 2025\n\n\nNoah Price\n\n\n\n\n\n\n\n\n\n\n\n\nAuditing Bias\n\n\n\n\n\nNoah Price Blog Post 3 - CSCI0451\n\n\n\n\n\nMar 12, 2025\n\n\nNoah Price\n\n\n\n\n\n\n\n\n\n\n\n\nDesign and Impact of Automated Decision Systems\n\n\n\n\n\nNoah Price Blog Post 2 - CSCI0451\n\n\n\n\n\nMar 5, 2025\n\n\nNoah Price\n\n\n\n\n\n\n\n\n\n\n\n\nClassifying Palmer Penguins\n\n\n\n\n\nNoah Price Blog Post 1 - CSCI0451\n\n\n\n\n\nFeb 21, 2025\n\n\nNoah Price\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "posts/blog-post-1-penguins/index.html",
@@ -156,7 +156,7 @@
   {
     "objectID": "posts/blog-post-7-logistic/index.html",
     "href": "posts/blog-post-7-logistic/index.html",
-    "title": "Overfitting, Overparameterization, and Double Descent",
+    "title": "Implementing Logistic Regression",
     "section": "",
     "text": "%load_ext autoreload\n%autoreload 2\nfrom logistic import LogisticRegression, GradientDescentOptimizer\n\n\nLink to implementation\nHere is a link to logistic.py on my repository: https://github.com/Noah5503/Noah5503.github.io/blob/main/posts/blog-post-7-logistic/logistic.py\n\n\nAbstract\n\n\nExperiments\n\n\nDiscussion"
   }
