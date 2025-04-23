@@ -2,15 +2,13 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/blog-post-7-logistic/index.html",
       "/posts/blog-post-6-descent/index.html",
       "/posts/blog-post-5-perceptron/index.html",
       "/posts/blog-post-4-limits/index.html",
       "/posts/blog-post-3-audit/index.html",
       "/posts/blog-post-2-design/index.html",
-      "/posts/blog-post-1-penguins/index.html",
-      "/posts/new-test-post/index.html",
-      "/posts/new-new-test-post/index.html",
-      "/posts/example-blog-post/index.html"
+      "/posts/blog-post-1-penguins/index.html"
     ]
   }
 ]
