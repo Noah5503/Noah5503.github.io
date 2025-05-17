@@ -294,13 +294,13 @@ window.Quarto = {
 <section id="affected-parties-benefits-and-harms" class="level3">
 <h3 class="anchored" data-anchor-id="affected-parties-benefits-and-harms">3.1 Affected Parties, Benefits, and Harms</h3>
 <p>We view the potential users of our project to be a fairly wide range, including governmental initiatives, commercial enterprises, and possibly individuals looking to invest in small-scale solar farming. Essentially, any party with potential interest in making use of solar energy has the potential to use our project.</p>
-<p>Under the assumption that our model will be used to inform solar development, potentially affected parties are the aforementioned end users, who may be benefitted by accurate results informing optimal solar energy development, or harmed if the results are misleading and do not accurately represent the theoretical output. Overall, local communities also have the potential to be impacted, as solar farms do take up a reasonable amount of property, which requires zoning and adequate space <span class="citation" data-cites="Igini2023">(<a href="#ref-Igini2023" role="doc-biblioref"><strong>Igini2023?</strong></a>)</span>. One other concern is that our application may unfairly harm underrepresented or marginalized groups, as solar panels are expensive to develop, and our model may prioritize more privileged areas. Lastly, it is important to recognize that while our project aims to optimize renewable energy generation, machine learning models require a significant amount of energy to train. While our model specifically only had to undergo training a limited number of times, it is still worth recognizing that in developing cleaner energy, we do have to make use of existing power.</p>
+<p>Under the assumption that our model will be used to inform solar development, potentially affected parties are the aforementioned end users, who may be benefitted by accurate results informing optimal solar energy development, or harmed if the results are misleading and do not accurately represent the theoretical output. Overall, local communities also have the potential to be impacted, as solar farms do take up a reasonable amount of property, which requires zoning and adequate space <span class="citation" data-cites="Igini2023">(<a href="#ref-Igini2023" role="doc-biblioref">Igini 2023</a>)</span>. One other concern is that our application may unfairly harm underrepresented or marginalized groups, as solar panels are expensive to develop, and our model may prioritize more privileged areas. Lastly, it is important to recognize that while our project aims to optimize renewable energy generation, machine learning models require a significant amount of energy to train. While our model specifically only had to undergo training a limited number of times, it is still worth recognizing that in developing cleaner energy, we do have to make use of existing power.</p>
 <p>To summarize, given the increasing global need for sustainable forms of energy, we believe that our model has the potential to be beneficial to the planet overall if it is used to promote development of solar energy. However, we also recognize the potential harms associated with inaccuracies in the model or over prioritization of certain areas over others.</p>
 </section>
 <section id="personal-investment" class="level3">
 <h3 class="anchored" data-anchor-id="personal-investment">3.2 Personal Investment</h3>
 <p>From a personal perspective, we all are invested in this project because we see its potential to improve the efficiency of new solar developments, and optimize implementations of renewable energy. We are passionate about increasing the amount of renewable energy used in our ecosystem, and view solar energy as one of the most widely applicable sources. We also believe that leveraging the now widely available data on solar irradiance, weather, and other geological features is a sensible step in the right direction for solar development.</p>
-<p>Common criticisms of solar energy include its high initial cost, variability with weather, and the requirement of land and materials to make use of this technology <span class="citation" data-cites="Igini2023">(<a href="#ref-Igini2023" role="doc-biblioref"><strong>Igini2023?</strong></a>)</span>. Given these difficulties, we find that leveraging data to find patterns of efficiency in solar power generation has the potential to make solar development a more viable source of clean, renewable energy. Using weather data as a feature in our model allows us to factor in weather variability by location, and more closely study the correlations between certain weather features and photovoltaic output. By determining the optimal locations for solar farms, we can also minimize the impacts of high initial costs and the land requirements, as fewer farms will be needed to achieve the same end results.</p>
+<p>Common criticisms of solar energy include its high initial cost, variability with weather, and the requirement of land and materials to make use of this technology <span class="citation" data-cites="Igini2023">(<a href="#ref-Igini2023" role="doc-biblioref">Igini 2023</a>)</span>. Given these difficulties, we find that leveraging data to find patterns of efficiency in solar power generation has the potential to make solar development a more viable source of clean, renewable energy. Using weather data as a feature in our model allows us to factor in weather variability by location, and more closely study the correlations between certain weather features and photovoltaic output. By determining the optimal locations for solar farms, we can also minimize the impacts of high initial costs and the land requirements, as fewer farms will be needed to achieve the same end results.</p>
 </section>
 <section id="overall-reflection" class="level3">
 <h3 class="anchored" data-anchor-id="overall-reflection">3.3 Overall Reflection</h3>
@@ -333,13 +333,13 @@ window.Quarto = {
 <figure class="figure">
 <img src="images/Total precipitation visualization.PNG" alt="TotPrecip" class="figure-img">
 <figcaption>
-<b>Figure 3: Total Precipitation Heat Map</b>.
+<b>Figure 2: Total Precipitation Heat Map</b>.
 </figcaption>
 </figure>
 <figure class="figure">
 <img src="images/Vegetation Cover Visualization.PNG" alt="VegCover" class="figure-img">
 <figcaption>
-<b>Figure 4: Vegetation Cover Heat Map.</b>
+<b>Figure 3: Vegetation Cover Heat Map.</b>
 </figcaption>
 </figure>
 <p>Because this dataset is from a reputable source and is fairly comprehensive, we can trust that our data is reliable. However, it is not without its limitations, particularly because the changes in latitude and longitude are quite coarse with each latitude-longitude pair corresponding to a 17.25x17.25 mile grid. While we were able to achieve finer measurements for our other data sources, we needed to make them more coarse in order to be consistent with this data (see Combining the Data). The climate variables we selected were chosen based on what we thought would have the largest impact on PVO, but our decisions were not backed by any quantitative evidence. Should we seek to make a more thorough model, we likely would want to select more climate features (many of which are provided by ERA5) and determine through quantitative analysis (like a correlation plot) which features would be most effective.</p>
@@ -352,7 +352,7 @@ window.Quarto = {
 <figure class="figure">
 <img src="images/elv_pvo.png" alt="Elv vs PVO" class="figure-img">
 <figcaption>
-<b>Figure 5: Elevation vs Photovoltaic Output</b>.
+<b>Figure 4: Elevation vs Photovoltaic Output</b>.
 </figcaption>
 </figure>
 <p>As the figure shows, there is some positive correlation between elevation and photovoltaic output, but it is a noisy relationship, and much of the elevation data is clustered in the zero to five hundred meter range. As a result, elevation was not the most strongly correlated feature in our dataset, but the outlying areas of high elevation showed strong photovoltaic output.</p>
@@ -366,7 +366,7 @@ window.Quarto = {
 <figure class="figure">
 <img src="images/corr_mat.png" alt="Elv vs PVO" class="figure-img">
 <figcaption>
-<b>Figure 6: Correlation Matrix</b>.
+<b>Figure 5: Correlation Matrix</b>.
 </figcaption>
 </figure>
 <p>While there are many interesting trends to observe in this correlation matrix, we were mostly concerned with the correlations to photovoltaic output (pvo). The strongest positive correlation was with solar irradiance, which follows our expectations, given that irradiance refers to the strength of the solar beams in a given location. Interestingly, the strongest negative correlation with photovoltaic output was total cloud cover, having even more of an impact than irradiance. This exemplifies one of the primary challenges with solar energy, in that cloud cover blocking the sun can dramatically harm energy output. Other key correlations include elevation, total precipitation, vegetation cover height, and sea level pressure.</p>
@@ -504,6 +504,9 @@ Google Developers. 2024. <span>“Elevation API Overview.”</span> <a href="htt
 </div>
 <div id="ref-Hersbach2023" class="csl-entry" role="listitem">
 Hersbach, Hans, B. Bell, P. Berrisford, G. Biavati, A. Horányi, J. Muñoz Sabater, J. Nicolas, et al. 2023. <span>“ERA5 Monthly Averaged Data on Single Levels from 1940 to Present.”</span> Copernicus Climate Change Service (C3S) Climate Data Store (CDS). <a href="https://doi.org/10.24381/cds.f17050d7">https://doi.org/10.24381/cds.f17050d7</a>.
+</div>
+<div id="ref-Igini2023" class="csl-entry" role="listitem">
+Igini, Martina. 2023. <span>“What Are the Advantages and Disadvantages of Solar Energy?”</span> <a href="https://earth.org/what-are-the-advantages-and-disadvantages-of-solar-energy/">https://earth.org/what-are-the-advantages-and-disadvantages-of-solar-energy/</a>.
 </div>
 <div id="ref-JEBLI2021120109" class="csl-entry" role="listitem">
 Jebli, Imane, Fatima-Zahra Belouadha, Mohammed Issam Kabbaj, and Amine Tilioua. 2021. <span>“Prediction of Solar Energy Guided by Pearson Correlation Using Machine Learning.”</span> <em>Energy</em> 224: 120109. https://doi.org/<a href="https://doi.org/10.1016/j.energy.2021.120109">https://doi.org/10.1016/j.energy.2021.120109</a>.
